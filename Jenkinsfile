@@ -1,22 +1,15 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9-eclipse-temurin-17'
-            args '-u root'
-        }
-    }
+    agent any
 
     stages {
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                // Using ${WORKSPACE} ensures Jenkins passes the exact absolute path to Docker
+                sh 'docker run --rm -v "${WORKSPACE}:/app" -w /app maven:3.9-eclipse-temurin-17 mvn clean package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
-            agent {
-                node('builtin') 
-            }
             steps {
                 script {
                     sh 'docker build -t strength-tracker:latest .'
