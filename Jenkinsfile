@@ -5,14 +5,18 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker container using your project's Dockerfile
                     sh 'docker build -t strength-tracker:latest .'
                 }
             }
         }
-        stage('Scan') {
+        stage('SonarQube Analysis') {
             steps {
-                echo 'Running SonarQube static code analysis...'
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv() {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
             }
         }
         stage('Push to Registry') {
