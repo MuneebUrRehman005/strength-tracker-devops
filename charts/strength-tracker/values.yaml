@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: mur123muneeb/strength-tracker
-  tag: latest
+  tag: "build-${BUILD_NUMBER}"
   pullPolicy: IfNotPresent
 
 service:
