@@ -4,15 +4,14 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Declarative pipeline automatically checks out the repo, 
-                // so we just echo a success message here.
-                echo 'Code successfully checked out by Jenkins SCM.'
+                echo 'Code successfully checked out.'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                // Run Maven using an official Maven Docker container so you don't need it pre-installed in Jenkins
+                sh 'docker run --rm -v $PWD:/app -w /app maven:3.9-eclipse-temurin-17 mvn clean package -DskipTests'
             }
         }
 
