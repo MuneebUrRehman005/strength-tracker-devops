@@ -1,0 +1,22 @@
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "strength-tracker.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | suffixTrim -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+*/}}
+{{- define "strength-tracker.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | suffixTrim -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | suffixTrim -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | suffixTrim -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
