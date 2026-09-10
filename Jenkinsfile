@@ -2,17 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Debug Workspace') {
-            steps {
-                sh 'pwd'
-                sh 'ls -la'
-            }
-        }
-
         stage('Build with Maven') {
             steps {
-                // If Maven isn't installed locally on the Jenkins node, let's see if we can use a direct build or check path
-                sh 'mvn clean package -DskipTests'
+                // Explicitly map the current workspace path to the Maven container
+                sh 'docker run --rm -v /var/jenkins_home/workspace/strength-tracker-pipeline:/app -w /app maven:3.9-eclipse-temurin-17 mvn clean package -DskipTests'
             }
         }
 
