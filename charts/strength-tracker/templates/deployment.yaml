@@ -15,8 +15,10 @@ spec:
         app.kubernetes.io/name: strength-tracker
     spec:
       containers:
-        - name: strength-tracker
+        - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          stdin: true
+          tty: true
           ports:
             - containerPort: 8080
