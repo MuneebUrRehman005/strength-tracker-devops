@@ -2,10 +2,17 @@ pipeline {
     agent any
 
     stages {
+        stage('Debug Workspace') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
         stage('Build with Maven') {
             steps {
-                // Using ${WORKSPACE} ensures Jenkins passes the exact absolute path to Docker
-                sh 'docker run --rm -v "${WORKSPACE}:/app" -w /app maven:3.9-eclipse-temurin-17 mvn clean package -DskipTests'
+                // If Maven isn't installed locally on the Jenkins node, let's see if we can use a direct build or check path
+                sh 'mvn clean package -DskipTests'
             }
         }
 
