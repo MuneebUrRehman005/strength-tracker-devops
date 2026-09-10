@@ -40,9 +40,15 @@ pipeline {
                     sh '''
                         git config user.name "Jenkins CI"
                         git config user.email "jenkins@build.local"
+                        
+                        # Dynamically update the tag in values.yaml to match the build
+                        sed -i 's/tag:.*/tag: "build-${BUILD_NUMBER}"/' charts/strength-tracker/values.yaml
+                        
                         git add charts/strength-tracker/values.yaml
-                        git commit -m "Update image tag via Jenkins build ${BUILD_NUMBER}"
-                        git push origin main
+                        git commit -m "Update image tag to build-${BUILD_NUMBER}" || echo "No changes to commit"
+                        
+                        # Push back to the main branch safely from detached HEAD
+                        git push origin HEAD:main
                     '''
                 }
             }
