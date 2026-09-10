@@ -34,22 +34,27 @@ pipeline {
                 }
             }
         }
-        stage('Update Config Repo') {
+       stage('Update Config Repo') {
             steps {
                 script {
-                    sh '''
-                        git config user.name "Jenkins CI"
-                        git config user.email "jenkins@build.local"
-                        
-                        # Dynamically update the tag in values.yaml to match the build
-                        sed -i 's/tag:.*/tag: "build-${BUILD_NUMBER}"/' charts/strength-tracker/values.yaml
-                        
-                        git add charts/strength-tracker/values.yaml
-                        git commit -m "Update image tag to build-${BUILD_NUMBER}" || echo "No changes to commit"
-                        
-                        # Push back to the main branch safely from detached HEAD
-                        git push origin HEAD:main
-                    '''
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials-id', 
+                                                       usernameVariable: 'GIT_USER', 
+                                                       passwordVariable: 'GIT_PASS')]) {
+                        sh '''
+                            git config user.name "Jenkins CI"
+                            git config user.email "jenkins@build.local"
+                            
+                            # Dynamically update the tag in values.yaml
+                            sed -i 's/tag:.*/tag: "build-${BUILD_NUMBER}"/' charts/strength-tracker/values.yaml
+                            
+                            git add charts/strength-tracker/values.yaml
+                            git commit -m "Update image tag to build-${BUILD_NUMBER}" || echo "No changes to commit"
+                            
+                            # Push using the authenticated remote URL
+                            git remote set-url origin https://${GIT_USER}:${GIT_PASS}@github.com/MuneebUrRehman005/strength-tracker-devops.git
+                            git push origin HEAD:main
+                        '''
+                    }
                 }
             }
         }
