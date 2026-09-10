@@ -12,6 +12,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
+                    // Compile java files locally in the workspace for the scanner
+                    sh 'javac Exercise.java StrengthTrackerApp.java'
+                    
                     def scannerHome = tool 'SonarScanner'
                     withSonarQubeEnv() {
                         sh "${scannerHome}/bin/sonar-scanner"
