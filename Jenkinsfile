@@ -28,13 +28,18 @@ pipeline {
                                                        usernameVariable: 'DOCKER_USER', 
                                                        passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                        
+                        // Tag and push both latest and the specific build number
                         sh 'docker tag strength-tracker:latest mur123muneeb/strength-tracker:latest'
+                        sh "docker tag strength-tracker:latest mur123muneeb/strength-tracker:build-${BUILD_NUMBER}"
+                        
                         sh 'docker push mur123muneeb/strength-tracker:latest'
+                        sh "docker push mur123muneeb/strength-tracker:build-${BUILD_NUMBER}"
                     }
                 }
             }
         }
-       stage('Update Config Repo') {
+        stage('Update Config Repo') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-credentials-id', 
