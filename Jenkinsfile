@@ -24,7 +24,15 @@ pipeline {
         }
         stage('Push to Registry') {
             steps {
-                echo 'Pushing the compiled image to Docker Hub...'
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                                                     usernameVariable: 'DOCKER_USER', 
+                                                     passwordVariable: 'DOCKER_PASS')]) {
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                        sh 'docker tag strength-tracker:latest mur123muneeb/strength-tracker:latest'
+                        sh 'docker push mur123muneeb/strength-tracker:latest'
+                    }
+                }
             }
         }
     }
