@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Strength Tracker</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Strength Tracker</h1>
+            <p>Select a day to log sets and calculate total volume.</p>
+        </header>
+
+        <div class="workout-list">
+            <!-- Push Day -->
+            <div class="card" onclick="toggleDetails('push-details')">
+                <h2>1. Push Day</h2>
+                <p>Shoulders & Triceps Focus</p>
+            </div>
+            <div id="push-details" class="details">
+                <h3>Dumbbell Shoulder Press & Tricep Extensions</h3>
+                <div class="calculator">
+                    <input type="number" id="push-sets" placeholder="Sets (e.g., 3)">
+                    <input type="number" id="push-reps" placeholder="Reps (e.g., 10)">
+                    <input type="number" id="push-weight" placeholder="Weight per Dumbbell">
+                    <button class="calc-btn" onclick="calculateVolume('push')">Calculate Total Volume</button>
+                    <p id="push-result" class="result"></p>
+                </div>
+            </div>
+
+            <!-- Pull Day -->
+            <div class="card" onclick="toggleDetails('pull-details')">
+                <h2>2. Pull Day</h2>
+                <p>Biceps, Forearms & Back Focus</p>
+            </div>
+            <div id="pull-details" class="details">
+                <h3>Dumbbell Bicep Curls</h3>
+                <div class="calculator">
+                    <input type="number" id="pull-sets" placeholder="Sets">
+                    <input type="number" id="pull-reps" placeholder="Reps">
+                    <input type="number" id="pull-weight" placeholder="Weight per Dumbbell">
+                    <button class="calc-btn" onclick="calculateVolume('pull')">Calculate Total Volume</button>
+                    <p id="pull-result" class="result"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // This function opens and closes the menu cards
+        function toggleDetails(elementId) {
+            const detailsSection = document.getElementById(elementId);
+            detailsSection.classList.toggle('active');
+        }
+
+        // This function calculates Sets x Reps x Weight
+        function calculateVolume(dayType) {
+            const sets = document.getElementById(dayType + '-sets').value;
+            const reps = document.getElementById(dayType + '-reps').value;
+            const weight = document.getElementById(dayType + '-weight').value;
+            const resultText = document.getElementById(dayType + '-result');
+            
+            if(sets && reps && weight) {
+                const totalVolume = sets * reps * weight;
+                resultText.innerText = `Great job! Total volume lifted: ${totalVolume} lbs/kg.`;
+            } else {
+                resultText.innerText = "Please enter values for sets, reps, and weight.";
+            }
+        }
+    </script>
+</body>
+</html>
