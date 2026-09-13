@@ -2,14 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: strength-tracker
-  labels:
-    app: strength-tracker
 spec:
-  type: ClusterIP
+  selector:
+    app: strength-tracker
   ports:
     - port: 8080
       targetPort: 8080
-      protocol: TCP
-      name: http
-  selector:
-    app: strength-tracker
