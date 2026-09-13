@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: strength-tracker
+        app.kubernetes.io/name: strength-tracker
     spec:
       containers:
         - name: {{ .Chart.Name }}
