@@ -4,7 +4,7 @@ metadata:
   name: strength-tracker
 spec:
   selector:
-    app: strength-tracker
+    app.kubernetes.io/name: strength-tracker
   ports:
     - port: 8080
       targetPort: 8080
